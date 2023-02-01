@@ -13,9 +13,10 @@ namespace Server
         static async Task Main(string[] args)
         {
             var listenSocket = new Socket(SocketType.Stream, ProtocolType.Tcp);
-            listenSocket.Bind(new IPEndPoint(IPAddress.Loopback, 8087));
+            IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, 502);
+            listenSocket.Bind(endpoint);
 
-            Console.WriteLine("Listening on port 8087");
+            Console.WriteLine($"Listening on {endpoint}");
 
             listenSocket.Listen(120);
 
@@ -28,10 +29,10 @@ namespace Server
 
         private static async Task ProcessLinesAsync(Socket socket)
         {
-            Console.WriteLine($"[{socket.RemoteEndPoint}]: connected");
+            Console.WriteLine($"{DateTime.Now}[{socket.RemoteEndPoint}]: connected");
 
             // Create a PipeReader over the network stream
-            var stream = new NetworkStream(socket);
+            NetworkStream stream = new NetworkStream(socket);
             var reader = PipeReader.Create(stream);
 
             while (true)
@@ -64,7 +65,7 @@ namespace Server
         private static bool TryReadLine(ref ReadOnlySequence<byte> buffer, out ReadOnlySequence<byte> line)
         {
             // Look for a EOL in the buffer.
-            SequencePosition? position = buffer.PositionOf((byte)'\n');
+            SequencePosition? position = buffer.PositionOf((byte)6);
 
             if (position == null)
             {
@@ -80,11 +81,10 @@ namespace Server
 
         private static void ProcessLine(in ReadOnlySequence<byte> buffer)
         {
-            foreach (var segment in buffer)
+            foreach (ReadOnlyMemory<byte> segment in buffer)
             {
                 Console.Write(Encoding.UTF8.GetString(segment.Span));
                 Console.Write(Encoding.UTF8.GetString(segment.ToArray()));
-                Console.WriteLine();
             }
         }
     }
