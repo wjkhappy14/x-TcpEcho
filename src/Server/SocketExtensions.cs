@@ -1,5 +1,4 @@
-﻿#if NET461
-using System;
+﻿using System;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -37,4 +36,3 @@ namespace Server
         }
     }
 }
-#endif

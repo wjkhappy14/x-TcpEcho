@@ -82,13 +82,10 @@ namespace Server
         {
             foreach (var segment in buffer)
             {
-#if NETCOREAPP2_1
                 Console.Write(Encoding.UTF8.GetString(segment.Span));
-#else
-                Console.Write(Encoding.UTF8.GetString(segment));
-#endif
+                Console.Write(Encoding.UTF8.GetString(segment.ToArray()));
+                Console.WriteLine();
             }
-            Console.WriteLine();
         }
     }
 }
