@@ -73,15 +73,15 @@ namespace EchoTool.Modes
         /// </summary>
         public void Run()
         {
-            var echoServer = new TcpEchoServer(_serverPort) {ConnectionTimeout = _connTimeout};
+            var echoServer = new TcpEchoServer(_serverPort) { ConnectionTimeout = _connTimeout };
             echoServer.OnConnect += echoServer_OnConnect;
             echoServer.OnDisconnect += echoServer_OnDisconnect;
             echoServer.OnDataReceived += echoServer_OnDataReceived;
             echoServer.OnSocketException += echoServer_OnSocketException;
-            
+
             Console.WriteLine(Messages.TCPServerCaption, _serverPort);
 
-            echoServer.Start();            
+            echoServer.Start();
             Console.ReadKey(true);
             echoServer.Stop();
         }
@@ -90,11 +90,7 @@ namespace EchoTool.Modes
         /// Event handler for client connect event
         /// </summary>
         /// <param name="clientEndPoint">Connected client end point</param>
-        private void echoServer_OnConnect(EndPoint clientEndPoint)
-        {
-            Console.WriteLine();
-            Console.WriteLine(Messages.TCPServerConnect, clientEndPoint, DateTime.Now.ToLongTimeString());            
-        }
+        private void echoServer_OnConnect(EndPoint clientEndPoint) => Console.WriteLine(Messages.TCPServerConnect, clientEndPoint, DateTime.Now.ToLongTimeString());
 
         /// <summary>
         /// Event handler for client disconnect event
@@ -102,8 +98,6 @@ namespace EchoTool.Modes
         /// <param name="timeout">True if connection was timeouted</param>
         private void echoServer_OnDisconnect(bool timeout)
         {
-            Console.WriteLine();
-
             Console.WriteLine(timeout ? Messages.TCPSessionTimeout : Messages.TCPSessionClosedByPeer);
 
             Console.WriteLine(Messages.TCPServerCaption, _serverPort);
@@ -124,11 +118,20 @@ namespace EchoTool.Modes
         /// <summary>
         /// Event handler for received data from client
         /// </summary>
-        /// <param name="receivedData">Data from client</param>
-        private void echoServer_OnDataReceived(byte[] receivedData)
+        /// <param name="received">Data from client</param>
+        private void echoServer_OnDataReceived(byte[] received) => Console.WriteLine(Display(received));
+
+        string Display(byte[] received)
         {
-            string data = Encoding.Unicode.GetString(receivedData);
-            Console.WriteLine(Messages.TCPServerDataReceived, DateTime.Now.ToLongTimeString(), data);
+            StringBuilder text = new StringBuilder();
+            text.Append($"Received {DateTime.Now.ToString("HH:mm:ss:fff")}] [{received.Length}]\t");
+            int index = 0;
+            foreach (byte number in received)
+            {
+                text.Append($" [{index}] {number}/{number.ToString("X2")}");//2 位16进制
+                index++;
+            }
+            return text.ToString();
         }
     }
 }

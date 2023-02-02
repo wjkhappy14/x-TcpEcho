@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "src\Client\Client
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "src\Server\Server.csproj", "{35542112-9549-407F-8609-833E87F4DBB7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EchoTool", "src\EchoTool\EchoTool.csproj", "{1D3A65A8-18CC-4620-84C1-E8D606D090E8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Echo", "src\EchoTool\Echo.csproj", "{1D3A65A8-18CC-4620-84C1-E8D606D090E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
